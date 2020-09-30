@@ -11,7 +11,7 @@ export const StructuresTree: React.FC<Props> = ({ structure }: Props) => {
     <div className="StructuresTree">
       {structure.name}
       <div style={{ display: "flex" }}>
-        {structure.childrenStructures.map((cs) => (
+        {structure.children.map((cs) => (
           <StructuresTree structure={cs} key={cs.name} />
         ))}
       </div>
