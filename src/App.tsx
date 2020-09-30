@@ -1,5 +1,5 @@
 import React from "react";
-import crawl from "tree-crawl";
+import crawl from "async-tree-crawl";
 import "./App.css";
 import { StructuresTree } from "./StructuresTree";
 
@@ -19,14 +19,20 @@ function App() {
   });
 
   const cleanRooms = () => {
-    crawl(
-      rootStructure,
-      (node: Structure) => {
-        doOperationFor(1);
-        console.log(`${node.name} cleaned!`);
-      },
-      {}
-    );
+    let startTime = performance.now();
+    async function iterateeFunction(node: Structure) {
+      if (performance.now() - startTime > 50) {
+        await new Promise((resolve) =>
+          requestAnimationFrame(() => {
+            startTime = performance.now();
+            resolve();
+          })
+        );
+      }
+      doOperationFor(1);
+      console.log(`${node.name} cleaned!`);
+    }
+    crawl(rootStructure, iterateeFunction, {});
   };
 
   return (
